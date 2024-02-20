@@ -1,13 +1,19 @@
 version: 1.33.Pre.Release.{build}
-image: Visual Studio 2019
 clone_folder: c:\project\mediaportal
+
 environment:
   JAVA_HOME: C:\Program Files (x86)\Java\jdk1.8.0
-  
-configuration:
-  - x86
-  - x64
-  
+
+  matrix:
+  - job_name: x86 Build
+    appveyor_build_worker_image: Visual Studio 2019
+
+  - job_name: x64 Build
+    appveyor_build_worker_image: Visual Studio 2019
+
+matrix:
+  fast_finish: true
+
 install:
 - cmd: >-
     git submodule update --init --recursive
@@ -20,7 +26,7 @@ for:
   -
     matrix:
       only:
-        - configuration: x86
+        - job_name: x86 Build
     build_script:
       - cmd: >-
           cd c:\project\mediaportal\build\
@@ -36,7 +42,7 @@ for:
   -
     matrix:
       only:
-        - configuration: x64
+        - job_name: x64 Build
     build_script:
           cd c:\project\mediaportal\build\
 
